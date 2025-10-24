@@ -247,7 +247,7 @@ const loginUser = async (user) => {
     initializeDashboard();    // Monta a estrutura do Kanban
     listenToPedidos();        // Conecta ao Firebase para carregar e ouvir pedidos
 
-    // A chamada setupEventListeners() FOI MOVIDA para a inicialização geral (startApp)
+    // A chamada setupEventListeners() está agora na função startApp()
 
     // Renderiza o painel gerencial se for gestor, senão garante que a aba de vendas esteja ativa
     if (isGestor && typeof renderDashboardGerencial === 'function') {
@@ -409,7 +409,7 @@ const createCardHTML = (pedido) => {
     // Formata os dados para exibição, com fallbacks para dados ausentes
     const clienteDisplay = (pedido.clienteNome || 'Cliente Desconhecido').substring(0, 25); // Limita tamanho
     const dataDisplay = formatDateTime(pedido.createdAt || pedido.agendamento); // Usa createdAt como preferência
-    // Garante que 'itens' seja um array antes de processar
+    // Garante que itens seja um array antes de processar
     const itensArray = Array.isArray(pedido.itens) ? pedido.itens : [];
     // Formata a lista de itens (incluindo quantidade e unidade)
     const itensDisplay = itensArray.length > 0 ?
@@ -434,7 +434,7 @@ const createCardHTML = (pedido) => {
                     <p class="name truncate" title="${pedido.clienteNome||'Cliente Desconhecido'}">${clienteDisplay}</p>
                     <p class="time flex-shrink-0 ml-2">${dataDisplay}</p>
                 </div>
-                <p class="text-sm truncate service text-gray-600" title="${itensDisplay}">${itensDisplay}</p>
+                <p class="text-sm truncate service text-gray-600" title="${itensDisplay}">${itensDisplay}</p> <!-- Mostra itens com quantidade -->
                 <div class="flex justify-between items-center mt-2 pt-1 border-t border-gray-100">
                     <p class="barber text-xs">${vendedorDisplay}</p>
                     <p class="price font-semibold">${valorDisplay}</p>
