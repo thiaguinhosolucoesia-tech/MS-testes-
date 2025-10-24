@@ -25,7 +25,7 @@ const CLOUDINARY_UPLOAD_PRESET = "eletroia_unsigned";
 // SUBSTITUA A LINHA ABAIXO PELA SUA CHAVE REAL DA API DO GEMINI (Google AI Studio)
 const GEMINI_API_KEY = "AIzaSyClCOFugk4oeE_cn05Zpampe7YFlgc_8Cs"; // <<<<<<<<<<<<<<< SUBSTITUA AQUI
 // -----------------------------------------------------------------------------
-const GEMINI_MODEL = "gemini-2.5-nano"; // Modelo alterado para nano, mais eficiente em tokens e mais rápido
+const GEMINI_MODEL = "gemini-2.5-flash"; // Modelo revertido para flash, pois nano não é suportado no endpoint V1.
 const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
 /* ==================================================================
 FIM DA SEÇÃO DE CREDENCIAIS

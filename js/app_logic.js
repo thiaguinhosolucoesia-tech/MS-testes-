@@ -258,35 +258,30 @@ const saveLogAndUploads = async (e) => {
             console.log(`Iniciando upload de ${filesToUpload.length} arquivo(s) para Cloudinary...`);
 
             // Map each file to an upload promise
-            const uploadPromises = filesToUpload.map(async (file, index) => {
-                console.log(`[${index + 1}/${filesToUpload.length}] Enviando ${file.name}...`);
-                const url = await uploadFileToCloudinary(file); // Upload via helper function
-                console.log(`[${index + 1}/${filesToUpload.length}] Upload de ${file.name} concluído. URL: ${url}`);
-                // Return the object structure to be saved in Firebase 'media' node
-                return {
-                    type: file.type || 'application/octet-stream', // File MIME type
-                    url: url, // Secure URL from Cloudinary
-                    name: file.name, // Original file name
-                    timestamp // Timestamp of upload completion (approx)
-                };
-            });
+            const mediaPromises = filesToUpload.map(file =>
+                uploadFileToCloudinary(file).then(result => ({ // O DASCHBOARDCHEVRON usa .then() para tratar a Promise
+                    type: result.type, // O resultado do uploadFileToCloudinary já é o objeto completo
+                    url: result.url,
+                    name: result.name,
+                    timestamp: timestamp // Usa o timestamp do log
+                }))
+            );
 
             // Wait for all upload promises to resolve
-            const mediaResults = await Promise.all(uploadPromises);
+            const mediaResults = await Promise.all(mediaPromises);
             console.log("Todos os uploads para Cloudinary concluídos. Resultados:", mediaResults);
 
             // --- Step 3: Save media references to Firebase ---
             const mediaRef = db.ref(`pedidos/${pedidoId}/media`);
             console.log(`Salvando ${mediaResults.length} referências de mídia no Firebase em /pedidos/${pedidoId}/media ...`);
-            for (const result of mediaResults) {
-                // IMPORTANT: Only push to Firebase if the result is a valid object (not a simple URL string, which era o erro anterior)
-                if (result && typeof result === 'object' && result.url) {
-                    await mediaRef.push().set(result); // Add each media object under the 'media' node
+            mediaResults.forEach(result => { // O DASCHBOARDCHEVRON usa forEach e não await
+                if (result && result.url) { // Verifica a validade antes de salvar
+                    mediaRef.push().set(result); // Add each media object under the 'media' node
                     console.log(`Referência para ${result.name} salva no Firebase.`);
                 } else {
                     console.warn("Resultado de upload inválido ou incompleto, ignorando salvamento no Firebase:", result);
                 }
-            }
+            });
             console.log("Todas as referências de mídia salvas no Firebase.");
         }
 
@@ -996,7 +991,7 @@ const getGeminiSuggestions = async (pedidoAtual, itensAtuais) => {
                 contents: [{ role: "user", parts: [{ text: prompt }] }], // Corrigido para o formato v1
                 // Safety settings (adjust if blocking valid responses)
                 safetySettings: [ { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" }, { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_MEDIUM_AND_ABOVE" }, { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_MEDIUM_AND_ABOVE" } ], // Removido DANGEROUS_CONTENT para evitar bloqueios excessivos
-                generationConfig: { temperature: 0.6, maxOutputTokens: maxTokens, stopSequences: ["\n\n"] } // Adicionado stopSequences e maxTokens dinâmico
+                generationConfig: { temperature: 0.6, stopSequences: ["\n\n"] } // Removido maxOutputTokens para usar o padrão da API e evitar erro MAX_TOKENS.
             })
         });
 
