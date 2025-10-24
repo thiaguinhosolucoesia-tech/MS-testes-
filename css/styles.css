@@ -1,0 +1,36 @@
+/* =============== FONTES E ESTILOS GERAIS =============== */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f0f2f5;
+  overflow-x: hidden;
+}
+:root { /* Define cores primárias para fácil ajuste */
+    --primary-color: #3b82f6; /* blue-500 */
+    --primary-hover: #2563eb; /* blue-600 */
+    --secondary-color: #f97316; /* orange-500 */
+}
+.tc { text-align: center; }
+.ap { animate-pulse; }
+
+/* =============== LAYOUT DO DASHBOARD =============== */
+#vendedorDashboard { display: flex; flex-direction: column; gap: 2.5rem; }
+.vendedor-section { background-color: #ffffff; border-radius: 12px; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.05); border-top: 4px solid var(--primary-color); }
+.vendedor-header { font-size: 1.5rem; font-weight: 600; color: #1f2937; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid #e5e7eb; }
+.kanban-container { display: grid; grid-template-columns: repeat(4, minmax(250px, 1fr)); gap: 1.5rem; }
+.status-column { background: #f3f4f6; border-radius: 8px; display: flex; flex-direction: column; box-shadow: inset 0 1px 2px 0 rgba(0,0,0,0.05); min-height: 150px; }
+.status-column h3 { font-weight: 600; text-transform: uppercase; font-size: 0.8rem; padding: 0.75rem; color: #4b5563; text-align: center; border-bottom: 1px solid #e5e7eb; margin-bottom: 1rem !important; background-color: #e5e7eb; border-radius: 8px 8px 0 0; }
+.client-list { flex-grow: 1; padding: 0 0.75rem 0.75rem 0.75rem; min-height: 200px; max-height: 65vh; overflow-y: auto; }
+
+/* Card de Pedido */
+.vehicle-card { background: #ffffff; border-radius: 6px; padding: 0.875rem; margin-bottom: 0.75rem; box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05); transition: all 0.2s ease-in-out; border: 1px solid #e5e7eb; border-left-width: 4px; cursor: pointer; position: relative; }
+.vehicle-card:hover { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06); z-index: 10; }
+.vehicle-card.status-Novos-Leads { border-left-color: #f59e0b; }
+.vehicle-card.status-Em-Negociacao { border-left-color: #06b6d4; }
+.vehicle-card.status-Aguardando-Pagamento { border-left-color: #8b5cf6; }
+.vehicle-card.status-Entregue { border-left-color: #10b981; opacity: 0.9; }
+.card-info .name { font-size: 0.95rem; font-weight: 600; color: #1e293b; }
+.card-info .time { font-size: 0.7rem; font-weight: 400; color: #64748b; }
+.card-info .service { font-size: 0.8rem; color: #4b5563; }
+.card-info .barber { font-size: 0.7rem; color: #64748b; text-transform: uppercase; }
+.card-info .price { font-size: 0.9rem; font-weight: 600; color: #166534; }
+.btn-move-status i { transition: color 0.2s ease; }
